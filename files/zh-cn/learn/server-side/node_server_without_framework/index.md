@@ -1,16 +1,18 @@
 ---
-title: Node.js server without a framework
+title: 不用框架的 Node.js 服务器
 slug: Learn/Server-side/Node_server_without_framework
+l10n:
+  sourceCommit: 8184fa218341dbb193ce6adaa1240c89fae045ec
 ---
 
 {{LearnSidebar}}
 
-This article provides a simple static file server built with pure [Node.js](https://nodejs.org/en/) without the use of a framework.
-The current state of Node.js is such that almost everything we needed is provided by the inbuilt APIs and just a few lines of code.
+本文提供了一个使用纯 [Node.js](https://nodejs.org/zh-cn/cn/) 构建的简单静态文件服务器，无需使用框架。
+在目前的 Node.js 中，内置的 API 和几行代码几乎就能提供我们所需的一切。
 
-## Example
+## 示例
 
-A simple static file server built with Node.js:
+使用 Node.js 构建的简单静态文件服务器：
 
 ```js
 import * as fs from "node:fs";
@@ -59,12 +61,12 @@ http
   })
   .listen(PORT);
 
-console.log(`Server running at http://127.0.0.1:${PORT}/`);
+console.log(`服务器正运行在 http://127.0.0.1:${PORT}/`);
 ```
 
-### Breakdown
+### 细节
 
-The following lines import internal Node.js modules.
+下面几行导入了 Node.js 的内部模块。
 
 ```js
 import * as fs from "node:fs";
@@ -72,26 +74,23 @@ import * as http from "node:http";
 import * as path from "node:path";
 ```
 
-Next we have a function for creating the server. `https.createServer` returns a `Server` object, which we can start up by listening on `PORT`.
+接下来是创建服务器的函数。`https.createServer` 会返回一个 `Server` 对象，我们可以通过对 `PORT` 的监听来启动它。
 
 ```js
 http
   .createServer((req, res) => {
-    /* handle http requests */
+    /* 处理 http 请求 */
   })
   .listen(PORT);
 
-console.log(`Server running at http://127.0.0.1:${PORT}/`);
+console.log(`服务器正运行在 http://127.0.0.1:${PORT}/`);
 ```
 
-The asynchronous function `prepareFile` returns the structure: `{ found: boolean, ext: string, stream: ReadableStream }`.
-If the file can be served (the server process has access and no path-traversal vulnerability is found), we will return the HTTP status of `200` as a `statusCode` indicating success (otherwise we return `HTTP 404`).
-Note that other status codes can be found in `http.STATUS_CODES`.
-With `404` status we will return content of `'/404.html'` file.
+异步函数 `prepareFile` 返回这样的结构：`{ found: boolean, ext: string, stream: ReadableStream }`。如果文件是可服务的（服务器进程可以访问且未发现路径遍历漏洞），我们将返回 HTTP 状态 `200` 作为表示成功的 `statusCode` （否则我们将返回 `HTTP 404`）。请注意，其他状态代码可以在 `http.STATUS_CODES` 中找到。对于 `404` 状态，我们将返回 `'/404.html'` 文件的内容。
 
-The extension of the file being requested will be parsed and lower-cased. After that we will search `MIME_TYPES` collection for the right [MIME types](/zh-CN/docs/Web/HTTP/MIME_types). If no matches are found, we use the `application/octet-stream` as the default type.
+所请求文件的扩展名将被解析并转为小写。然后，我们在 `MIME_TYPES` 集合中搜索正确的 [MIME 类型](/zh-CN/docs/Web/HTTP/MIME_types)。如果没有找到匹配的类型，我们将使用 `application/octet-stream` 作为默认类型。
 
-Finally, if there are no errors, we send the requested file. The `file.stream` will contain a `Readable` stream that will be piped into `res` (an instance of the `Writable` stream).
+最后，如果没有异常，我们将发送所请求的文件。`file.stream` 将包含一个 `Readable` 流，并被导入到 `res` 流中（`Writable` 流的实例）。
 
 ```js
 res.writeHead(statusCode, { "Content-Type": mimeType });
